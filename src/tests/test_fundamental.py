@@ -1,13 +1,27 @@
+import numpy
+import csv
+from collections import namedtuple
+import Image
+
 import fundamental
 
-from nose import with_setup
+from nose.tools import assert_equal
 
-def setup_func():
-    "set up test fixtures"
+ImageTuple = namedtuple("Image", ['array', 'features'])
 
-def teardown_func():
-    "tear down test fixtures"
+class TestFundamental(object):
 
-@with_setup(setup_func, teardown_func)
-def test_fundamental():
-    assert fundamental.fundamental(None, None)
+    def setup(self):
+        self.img0 = self.load_image('src/tests/pic1.jpg', 'src/tests/pic1.csv')
+        self.img1 = self.load_image('src/tests/pic2.jpg', 'src/tests/pic2.csv')
+
+    def load_image(self, image_file, feature_file):
+        image = Image.open(image_file)
+        array = numpy.array(image)
+        features = csv.reader(open(feature_file))
+        return ImageTuple(array, features)
+
+    def test_image_array_shape(self):
+
+        assert_equal((500,335, 4), self.img0.array.shape)
+
