@@ -23,5 +23,4 @@ class TestFundamental(object):
 
     def test_image_array_shape(self):
 
-        assert_equal((500,335, 4), self.img0.array.shape)
-
+        assert_equal((335, 500, 3), self.img0.array.shape)
