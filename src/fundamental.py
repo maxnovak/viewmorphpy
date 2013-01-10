@@ -10,7 +10,7 @@ def fundamental(points0, points1):
     X1_norm = T1_norm * XY1
     A = calcA(X0_norm, X1_norm)
     Fundamental = calcFnorm(A, T0_norm, T1_norm)
-    print Fundamental
+##    print Fundamental
     return Fundamental
 
 def formatForFund(points0, points1):
@@ -105,12 +105,12 @@ def calcFnorm(A, T0_norm, T1_norm):
     SS_Matrix = numpy.zeros((3,3), dtype = complex)
     SS_Matrix[:3,:3] = numpy.diag(SS)
 ##    print SS_Matrix
-    F = numpy.dot(numpy.dot(US,SS_Matrix),VSh)
+    F = US * SS_Matrix * VSh
 ##    print F
-    Fnorm = numpy.dot(numpy.dot(T1_norm.T,F),T0_norm)
-##    print Fnorm
+    Fnorm = T1_norm.T * F * T0_norm
+##    print Fnorm 
     return Fnorm
 
 
 
-fundamental(numpy.mat([[1771,1111],[2073.5,1056],[1963.5,1259.5],[1732.5,1435.5]]), numpy.array([[1771,1111],[2073.5,1056],[1963.5,1259.5],[1732.5,1435.5]]))
+#fundamental(numpy.mat([[1771,1111],[2073.5,1056],[1963.5,1259.5],[1732.5,1435.5],[2095.5,1347.5],[1908.5,1468.5],[1941.5,1666.5],[1210,1705],[2156,1551]]), numpy.mat([[1738,1111],[2117.5,1094.5],[1936,1309],[1710.5,1457.5],[2161.5,1430],[1919.5,1512.5],[1925,1732.5],[1342,1633.5],[2420,1650]]))
