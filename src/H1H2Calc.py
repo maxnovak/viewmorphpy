@@ -2,7 +2,7 @@ import numpy
 import math
 from fundamental import *
 
-def H1H2warp(fundamental):
+def H1H2Calc(fundamental):
     e0,d0,e1,d1 = FindEAndD(fundamental)
     dividend = d0[1]*e0[0] - d0[0]*e0[1]
     
@@ -147,4 +147,4 @@ if __name__ == "__main__":
                               [1919.5,1512.5],[1925,1732.5],[1342,1633.5],[2420,1650],[1644.5,2029.5],
                               [2128.5,2035],[1941.5,374],[1936,1122],[1578.5,1111],[2288,1089],[1798.5,786.5]
                               ,[2095.5,803],[1540,1391.5],[2293.5,1364]]))
-    H1H2warp(fund)
+    H1H2Calc(fund)
