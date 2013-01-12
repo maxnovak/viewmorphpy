@@ -2,3 +2,5 @@ env
 build
 *.*~
 *.pyc
+large images
+small images
