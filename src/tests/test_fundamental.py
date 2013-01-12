@@ -3,7 +3,6 @@ import csv
 from collections import namedtuple
 import Image
 
-import fundamental
 
 from nose.tools import assert_equal
 
