@@ -29,9 +29,10 @@ class TestFundamental(object):
         assert_equal((335, 500, 3), self.img0.array.shape)
 
     def test_fundamental(self):
-        f = fundamental.fundamental(self.img0.features, self.img1.features)
-        expected = numpy.array([[  4.51920950e-09+0.j, 6.38289111e-10+0.j, -1.26394050e-05+0.j],
-                    [  1.89291668e-09+0.j, 1.09709829e-09+0.j, -9.60231967e-06+0.j],
-                    [ -2.65578925e-06+0.j, 5.38727389e-06+0.j, -2.24914918e-02+0.j]])
-        assert(numpy.allclose(expected, f))
+
+        expected = numpy.array([[  3.01805937e-08, 9.93241494e-08, -3.08139862e-04],
+                                [  1.40534854e-07, 1.58636530e-09, -2.25634230e-03],
+                                [  2.19215677e-04, 1.94282659e-03, -6.12417916e-02]])
+        assert(numpy.allclose(expected, fundamental.fundamental(self.img0.features, self.img1.features)))
+
 
