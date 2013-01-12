@@ -3,6 +3,7 @@ import Image
 import csv
 from fundamental import *
 from H1H2Calc import *
+##from Transition import *
 import cv
 
 def main():
@@ -20,10 +21,26 @@ def main():
     fund = fundamental(features0, features1)
     H1, H2 = H1H2Calc(fund)
     prewarp1, prewarp2 = WarpImages(image0, image1, H1, H2)
-    featwarp1 = WarpFeatures(features0, H1)
-    featwarp2 = WarpFeatures(features1, H2)
-    print featwarp1
-    
+    features0, features1 = formatForFund(features0, features1)
+    warpFeatures0 = WarpFeatures(features0.T, H1)
+    warpFeatures1 = WarpFeatures(features1.T, H2)
+    #Transition(prewarp1, prewarp2, warpFeatures0, warpFeatures1, features0, features1)
+    Linear(prewarp1, prewarp2, H1, H2)    
+
+
+def Linear(prewarp1, prewarp2, H1, H2):
+    warp = cv.fromarray(numpy.zeros((5000,5000,3),numpy.uint8))
+    for i in range(11):
+        n = i/10.
+##        HS = (1-n)*H1 + n*H2
+##        HS = HS.T.copy()
+##        HS = cv.fromarray(HS)
+        cv.AddWeighted(prewarp1, 1-n, prewarp2, n, 0.0, warp)
+##        cv.WarpPerspective(warp, warp, HS)
+        cv.SaveImage("warp"+str(i)+".jpg", warp)
+
+
+        
 def WarpImages(image0, image1, H1, H2):
     imgarray0 = numpy.array(image0)
 ##    print imgarray0[0,0]
@@ -33,22 +50,22 @@ def WarpImages(image0, image1, H1, H2):
     H1 = cv.fromarray(H1)
     cvimg2 = cv.fromarray(imgarray1)
     H2 = cv.fromarray(H2)
-    out1 = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
-    out2 = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
+    out1 = cv.fromarray(numpy.zeros((5000,5000,3),numpy.uint8))
+    out2 = cv.fromarray(numpy.zeros((5000,5000,3),numpy.uint8))
     cv.WarpPerspective(cvimg1, out1, H1)
     cv.WarpPerspective(cvimg2, out2, H2)
     
-    cv.SaveImage("warp1.jpg", out1)
-    cv.SaveImage("warp2.jpg", out2)
+##    cv.SaveImage("warp1.jpg", out1)
+##    cv.SaveImage("warp2.jpg", out2)
     return out1, out2
 
 def  WarpFeatures(features, H):
-    cvfeatures = cv.fromarray(features)
-    print cvfeatures.rows
-    out = cv.fromarray(numpy.zeros((cvfeatures.rows,cvfeatures.cols),numpy.uint8))
-    cv.WarpPerspective(cvfeatures, out, H)
-    return out
     
-    
+    for row in features:
+        row[:] = row[:] * H
+    return features
+
+
+
 if __name__ == "__main__":
     main()
