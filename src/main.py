@@ -29,15 +29,15 @@ def main():
 
 
 def Linear(prewarp1, prewarp2, H1, H2):
-    warp = cv.fromarray(numpy.zeros((5000,5000,3),numpy.uint8))
+    warp = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
     for i in range(11):
         n = i/10.
-##        HS = (1-n)*H1 + n*H2
-##        HS = HS.T.copy()
-##        HS = cv.fromarray(HS)
+        HS = (1-n)*H1 + n*H2
+        HS = HS.T.copy()
+        HS = cv.fromarray(HS)
         cv.AddWeighted(prewarp1, 1-n, prewarp2, n, 0.0, warp)
-##        cv.WarpPerspective(warp, warp, HS)
-        cv.SaveImage("warp"+str(i)+".jpg", warp)
+        cv.WarpPerspective(warp, warp, HS)
+        cv.SaveImage("images/warp"+str(i)+".jpg", warp)
 
 
         
@@ -50,13 +50,13 @@ def WarpImages(image0, image1, H1, H2):
     H1 = cv.fromarray(H1)
     cvimg2 = cv.fromarray(imgarray1)
     H2 = cv.fromarray(H2)
-    out1 = cv.fromarray(numpy.zeros((5000,5000,3),numpy.uint8))
-    out2 = cv.fromarray(numpy.zeros((5000,5000,3),numpy.uint8))
+    out1 = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
+    out2 = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
     cv.WarpPerspective(cvimg1, out1, H1)
     cv.WarpPerspective(cvimg2, out2, H2)
     
-##    cv.SaveImage("warp1.jpg", out1)
-##    cv.SaveImage("warp2.jpg", out2)
+    cv.SaveImage("images/prewarp1.jpg", out1)
+    cv.SaveImage("images/prewarp2.jpg", out2)
     return out1, out2
 
 def  WarpFeatures(features, H):
