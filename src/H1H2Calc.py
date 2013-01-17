@@ -28,8 +28,8 @@ def H1H2Calc(fundamental):
 
     H1 = rp0 * rdt0
     H2 = T * rp1 * rdt1
-    print "Warp Matrix for image 1:\n", H1
-    print "Warp Matrix for image 2:\n", H2
+##    print "Warp Matrix for image 1:\n", H1
+##    print "Warp Matrix for image 2:\n", H2
     return H1,H2
 
 def CalcT(FR):

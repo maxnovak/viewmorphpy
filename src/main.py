@@ -5,10 +5,13 @@ from fundamental import *
 from H1H2Calc import *
 ##from Transition import *
 import cv
+import profile
 
 def main():
-    image0 = Image.open('pic1.jpg')
-    image1 = Image.open('pic2.jpg')
+    image0 = cv.LoadImage('pic1.jpg')
+    image1 = cv.LoadImage('pic2.jpg')
+    buff = cv.LoadImage('buff.jpg')
+    buff2 = cv.LoadImage('buff.jpg')
     #image[ y, x , rgb ]
     features0 = numpy.mat([[1771,1111],[2073.5,1056],[1963.5,1259.5],[1732.5,1435.5],[2095.5,1347.5],
                     [1908.5,1468.5],[1941.5,1666.5],[1210,1705],[2156,1551],[1534.5,2040.5],
@@ -20,44 +23,60 @@ def main():
                     [2095.5,803],[1540,1391.5],[2293.5,1364]])
     fund = fundamental(features0, features1)
     H1, H2 = H1H2Calc(fund)
-    prewarp1, prewarp2 = WarpImages(image0, image1, H1, H2)
+    prewarp1, prewarp2 = WarpImages(image0, image1, H1, H2, buff, buff2)
     features0, features1 = formatForFund(features0, features1)
     warpFeatures0 = WarpFeatures(features0.T, H1)
     warpFeatures1 = WarpFeatures(features1.T, H2)
     #Transition(prewarp1, prewarp2, warpFeatures0, warpFeatures1, features0, features1)
-    Linear(prewarp1, prewarp2, H1, H2)    
+    Linear(prewarp1, prewarp2, H1, H2, buff)    
 
 
-def Linear(prewarp1, prewarp2, H1, H2):
-    warp = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
+def Linear(prewarp1, prewarp2, H1, H2,buff):
+    morph = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
+##    cv.NamedWindow('display')
+    writer = cv.CreateVideoWriter("buffer.avi", cv.CV_FOURCC('I','4','2','0'), 10, (500,500), True)
     for i in range(11):
         n = i/10.
-        HS = (1-n)*H1 + n*H2
+        HS = (1-n)*H1 + (n)*H2
         HS = HS.T.copy()
         HS = cv.fromarray(HS)
-        cv.AddWeighted(prewarp1, 1-n, prewarp2, n, 0.0, warp)
-        cv.WarpPerspective(warp, warp, HS)
-        cv.SaveImage("images/warp"+str(i)+".jpg", warp)
+        cv.AddWeighted(prewarp1, 1-n, prewarp2, n, 0.0, buff)
+        
+        cv.WriteFrame(writer, buff)
+        ##shows the images before morph
+##        cv.ShowImage('display',morph)
+##        cv.WaitKey(0)
+        ##shows image after morph
+####        cv.WarpPerspective(morph, morph, HS)
+##        cv.ShowImage('display',morph)
+##        cv.WaitKey(0)
+        ##Saves image
+##        cv.SaveImage("images/morph"+str(i)+".jpg", morph)
+        ##Video
+##        writer = cv.CreateVideoWriter("buffer.avi", CV_FOURCC('M','J','P','G'), 10, (500,355), True)
+        
+        
 
 
         
-def WarpImages(image0, image1, H1, H2):
-    imgarray0 = numpy.array(image0)
+def WarpImages(image0, image1, H1, H2,buff,buff2):
 ##    print imgarray0[0,0]
-    imgarray1 = numpy.array(image1)
-    cvimg1 = cv.fromarray(imgarray0)
 ##    print cvimg1[0,0]
     H1 = cv.fromarray(H1)
-    cvimg2 = cv.fromarray(imgarray1)
     H2 = cv.fromarray(H2)
     out1 = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
     out2 = cv.fromarray(numpy.zeros((500,500,3),numpy.uint8))
-    cv.WarpPerspective(cvimg1, out1, H1)
-    cv.WarpPerspective(cvimg2, out2, H2)
+    cv.WarpPerspective(image0, buff, H1)
+    cv.WarpPerspective(image1, buff2, H2)
     
-    cv.SaveImage("images/prewarp1.jpg", out1)
-    cv.SaveImage("images/prewarp2.jpg", out2)
-    return out1, out2
+##    cv.SaveImage("images/prewarp1.jpg", out1)
+##    cv.SaveImage("images/prewarp2.jpg", out2)
+##    cv.NamedWindow('display')
+##    cv.ShowImage('display', out1)
+##    cv.WaitKey(0)
+##    cv.ShowImage('display', out2)
+##    cv.WaitKey(0)
+    return buff, buff2
 
 def  WarpFeatures(features, H):
     
@@ -69,3 +88,6 @@ def  WarpFeatures(features, H):
 
 if __name__ == "__main__":
     main()
+##    cv.WaitKey(0)
+##    cv.DestroyWindow('display')
+##    profile.run('main(); print')
