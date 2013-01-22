@@ -11,7 +11,7 @@ def fundamental(points0, points1):
     X1_norm = T1_norm * XY1
     A = calcA(X0_norm, X1_norm)
     Fundamental = calcFnorm(A, T0_norm, T1_norm)
-##    print "Fundamental Matrix:\n",Fundamental
+    print "Fundamental Matrix:\n",Fundamental
     return Fundamental
 
 def formatForFund(points0, points1):
