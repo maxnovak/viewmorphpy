@@ -18,7 +18,7 @@ def main():
         features0.append([float(r) for r in row])
     features0 = numpy.mat(features0)
     features1 = []
-    for row in csv.reader(open('tests/grid.csv')):
+    for row in csv.reader(open('tests/grid2.csv')):
         features1.append([float(r) for r in row])
     features1 = numpy.mat(features1)
     
@@ -37,8 +37,9 @@ def main():
 ##    cv.WaitKey(0)
 ##    cv.ShowImage('prewarp2', prewarp2)
 ##    cv.WaitKey(0)
+    Test(prewarp1, prewarp2, H1, H2)
     Linear(prewarp1, prewarp2, H1, H2, writer)
-    Linear(prewarp2, prewarp1, H2, H1, writer)
+##    Linear(prewarp2, prewarp1, H2, H1, writer)
 ##    cv.ShowImage('prewarp1', prewarp1)
 ##    cv.WaitKey(0)
 ##    cv.ShowImage('prewarp2', prewarp2)
@@ -82,6 +83,19 @@ def WarpImages(image0, image1, H1, H2,buff,buff2):
 ##    cv.ShowImage('display', out2)
 ##    cv.WaitKey(0)
     return buff, buff2
+
+def Test(img0, img1, H0, H1):
+    buff = cv.LoadImage('buff.jpg')
+    H0 = cv.fromarray(H0.T.copy())
+    cv.WarpPerspective(img0, buff, H0)
+    cv.SaveImage("Results/warpBack0.jpg", buff)
+    buff = cv.LoadImage('buff.jpg')
+    H1 = cv.fromarray(H1.T.copy())
+    cv.WarpPerspective(img1, buff, H1)
+    cv.SaveImage("Results/warpBack1.jpg",buff)
+    
+
+
 
 def  WarpFeatures(features, H):
     

@@ -1,6 +1,7 @@
 import numpy
 import Image
 import math
+import profile
 ####def Transition(prewarp0, prewarp1, warpFeat0, warpFeat1, feat0, feat1):
 ####    #not implemented yet, could not understand alg without matlab
 ####    FeatureMorph(prewarp0, prewarp1, i, 10)
@@ -76,7 +77,7 @@ def FeatureMorph(im0, im1, i, N):
 
         Xx = Xdest[:,:,0]
         Xy = Xdest[:,:,1]
-###Correct so far####
+
         dist = vtemp
         I = numpy.nonzero(u > 1)
 
@@ -110,14 +111,21 @@ def FeatureMorph(im0, im1, i, N):
     Xxs1 = Xxs[:,:,1]
 
     yes = numpy.nonzero((Xxs0 > 0) & (Xxs0 <= x0) & (Xxs1 > 0) & (Xxs1 <= y0))
-##    print yes
+    print yes
+    #stores as two arrays, x and y values in each array
 
-    test = Xxs0[yes] + (Xxs1[yes]-1)*x0
-    temp = numpy.nonzero(test > 0)
+##    test = Xxs0[yes] + (Xxs1[yes]-1)*x0
+##    temp = numpy.nonzero(test > 0)
     
+    image0a = image0[:]
     premorph0a = numpy.zeros(numpy.shape(image0))
-    premorph0a[yes] = image0[temp]
-    premorph0a[x0*y0 + yes] = image0[x0*y0 + (Xxs0[yes] + (Xxs[yes]-1)*x0)]
+    print numpy.shape(Xxs0[yes])
+    print numpy.shape(Xxs1[yes]-1)
+    
+##    current issue is with getting indexed values for image0a from the values retrived from Xxs0 with the "yes" indexes
+##    print (Xxs0[yes] + (Xxs1[yes]-1)*x0) # proving that the stuff within image0a in the line below is actual values and not indexes
+    premorph0a[yes] = image0a[(Xxs0[yes] + (Xxs1[yes]-1)*x0)]
+    premorph0a[x0*y0 + yes] = image0[x0*y0 + (Xxs0[yes] + (Xxs1[yes]-1)*x0)]
     premorph0a[2*x0*y0 + yes] = image0[2*x0*y0 + (Xxs0[yes] + (Xxs1[yes] - 1) * x0)]
     premorph0 = numpy.reshape(premorph0a, (x0,y0,3))
     
